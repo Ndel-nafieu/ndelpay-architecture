@@ -57,6 +57,21 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        layer: {
+          frontend: "hsl(var(--layer-frontend))",
+          api: "hsl(var(--layer-api))",
+          services: "hsl(var(--layer-services))",
+          infra: "hsl(var(--layer-infra))",
+          providers: "hsl(var(--layer-providers))",
+        },
+        service: {
+          auth: "hsl(var(--service-auth))",
+          user: "hsl(var(--service-user))",
+          wallet: "hsl(var(--service-wallet))",
+          payment: "hsl(var(--service-payment))",
+          infra: "hsl(var(--service-infra))",
+          provider: "hsl(var(--service-provider))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
