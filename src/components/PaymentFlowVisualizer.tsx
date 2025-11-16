@@ -10,7 +10,7 @@ import {
 interface PaymentStep {
   id: string;
   name: string;
-  icon: React.ReactNode;
+  icon: () => React.ReactNode;
   status: "pending" | "processing" | "completed" | "failed";
   latency: number;
   description: string;
@@ -29,7 +29,7 @@ const INITIAL_STEPS: PaymentStep[] = [
   {
     id: "customer",
     name: "Customer Initiates",
-    icon: <Smartphone className="w-5 h-5" />,
+    icon: () => <Smartphone className="w-5 h-5" />,
     status: "pending",
     latency: 0,
     description: "Payment request sent from customer app"
@@ -37,7 +37,7 @@ const INITIAL_STEPS: PaymentStep[] = [
   {
     id: "gateway",
     name: "API Gateway",
-    icon: <Globe className="w-5 h-5" />,
+    icon: () => <Globe className="w-5 h-5" />,
     status: "pending",
     latency: 15,
     description: "Request routing and rate limiting"
@@ -45,7 +45,7 @@ const INITIAL_STEPS: PaymentStep[] = [
   {
     id: "auth",
     name: "Authentication",
-    icon: <Shield className="w-5 h-5" />,
+    icon: () => <Shield className="w-5 h-5" />,
     status: "pending",
     latency: 8,
     description: "JWT validation and session check"
@@ -53,7 +53,7 @@ const INITIAL_STEPS: PaymentStep[] = [
   {
     id: "fraud",
     name: "Fraud Detection",
-    icon: <AlertTriangle className="w-5 h-5" />,
+    icon: () => <AlertTriangle className="w-5 h-5" />,
     status: "pending",
     latency: 45,
     description: "Risk scoring and anomaly detection"
@@ -61,7 +61,7 @@ const INITIAL_STEPS: PaymentStep[] = [
   {
     id: "payment",
     name: "Payment Service",
-    icon: <CreditCard className="w-5 h-5" />,
+    icon: () => <CreditCard className="w-5 h-5" />,
     status: "pending",
     latency: 12,
     description: "Transaction creation and validation"
@@ -69,7 +69,7 @@ const INITIAL_STEPS: PaymentStep[] = [
   {
     id: "wallet",
     name: "Wallet Service",
-    icon: <Wallet className="w-5 h-5" />,
+    icon: () => <Wallet className="w-5 h-5" />,
     status: "pending",
     latency: 18,
     description: "Balance check and ledger update"
@@ -77,7 +77,7 @@ const INITIAL_STEPS: PaymentStep[] = [
   {
     id: "provider",
     name: "Payment Provider",
-    icon: <Server className="w-5 h-5" />,
+    icon: () => <Server className="w-5 h-5" />,
     status: "pending",
     latency: 350,
     description: "Paystack/Bank processing"
@@ -85,7 +85,7 @@ const INITIAL_STEPS: PaymentStep[] = [
   {
     id: "settlement",
     name: "Settlement",
-    icon: <CheckCircle2 className="w-5 h-5" />,
+    icon: () => <CheckCircle2 className="w-5 h-5" />,
     status: "pending",
     latency: 25,
     description: "Final confirmation and notification"
@@ -241,7 +241,7 @@ export const PaymentFlowVisualizer = () => {
           {INITIAL_STEPS.map((step, idx) => (
             <div key={step.id} className="flex items-center gap-2">
               <div className="flex items-center gap-2 px-3 py-2 bg-muted/30 rounded-lg">
-                <div className="text-muted-foreground">{step.icon}</div>
+                <div className="text-muted-foreground">{step.icon()}</div>
                 <div className="text-sm">
                   <div className="font-medium">{step.name}</div>
                   <div className="text-xs text-muted-foreground">{step.latency}ms</div>
@@ -305,7 +305,7 @@ export const PaymentFlowVisualizer = () => {
                         ${step.status === "processing" ? "scale-110" : ""}
                       `}>
                         <div className="relative">
-                          {step.icon}
+                          {step.icon()}
                           {step.status === "processing" && (
                             <div className="absolute -inset-1 border-2 border-primary rounded-full animate-ping" />
                           )}
