@@ -3,6 +3,7 @@ import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { NetworkTopology } from "@/components/NetworkTopology";
 import { PaymentFlowVisualizer } from "@/components/PaymentFlowVisualizer";
 import { PayoutFlowVisualizer } from "@/components/PayoutFlowVisualizer";
+import { ReconciliationView } from "@/components/ReconciliationView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
@@ -10,11 +11,12 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8">
         <Tabs defaultValue="architecture" className="w-full">
-          <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-4 mb-8">
+          <TabsList className="grid w-full max-w-4xl mx-auto grid-cols-5 mb-8">
             <TabsTrigger value="architecture">Architecture</TabsTrigger>
-            <TabsTrigger value="topology">Network Topology</TabsTrigger>
-            <TabsTrigger value="payment-flow">Payment Flow</TabsTrigger>
-            <TabsTrigger value="payout-flow">Payout Flow</TabsTrigger>
+            <TabsTrigger value="topology">Network</TabsTrigger>
+            <TabsTrigger value="payment-flow">Payments</TabsTrigger>
+            <TabsTrigger value="payout-flow">Payouts</TabsTrigger>
+            <TabsTrigger value="reconciliation">Reconciliation</TabsTrigger>
           </TabsList>
           <TabsContent value="architecture">
             <ArchitectureDiagram />
@@ -27,6 +29,9 @@ const Index = () => {
           </TabsContent>
           <TabsContent value="payout-flow">
             <PayoutFlowVisualizer />
+          </TabsContent>
+          <TabsContent value="reconciliation">
+            <ReconciliationView />
           </TabsContent>
         </Tabs>
       </div>
