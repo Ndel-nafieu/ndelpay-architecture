@@ -102,7 +102,7 @@ export const PaymentFlowVisualizer = () => {
       id: `payment-${Date.now()}`,
       amount: Math.floor(Math.random() * 50000) + 1000,
       currency: "NGN",
-      steps: JSON.parse(JSON.stringify(INITIAL_STEPS)),
+      steps: INITIAL_STEPS.map(step => ({ ...step })),
       currentStep: 0,
       startTime: Date.now()
     };
