@@ -3,7 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, Lock, Zap } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Copy, Check, Lock, Zap, Play, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Endpoint {
@@ -227,6 +229,10 @@ const methodColors: Record<string, string> = {
 
 export function ApiDocumentation() {
   const [copiedIndex, setCopiedIndex] = useState<string | null>(null);
+  const [apiKey, setApiKey] = useState("");
+  const [requestBodies, setRequestBodies] = useState<Record<string, string>>({});
+  const [responses, setResponses] = useState<Record<string, any>>({});
+  const [loading, setLoading] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
 
   const copyToClipboard = (text: string, id: string) => {
@@ -237,6 +243,63 @@ export function ApiDocumentation() {
       description: "Code snippet has been copied",
     });
     setTimeout(() => setCopiedIndex(null), 2000);
+  };
+
+  const handleApiCall = async (endpoint: Endpoint, endpointId: string) => {
+    if (!apiKey) {
+      toast({
+        title: "API Key Required",
+        description: "Please enter your API key to test the endpoint",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading({ ...loading, [endpointId]: true });
+
+    try {
+      // Simulate API call (in production, this would call the actual API)
+      const requestBody = requestBodies[endpointId] || endpoint.request;
+      
+      // Parse the path to handle dynamic segments
+      const path = endpoint.path.replace(/{id}/g, 'test_id_123');
+      
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+      
+      // Mock response
+      const mockResponse = {
+        status: 200,
+        statusText: "OK",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Request-Id": `req_${Math.random().toString(36).substr(2, 9)}`,
+          "X-RateLimit-Remaining": "99"
+        },
+        data: JSON.parse(endpoint.response)
+      };
+
+      setResponses({ ...responses, [endpointId]: mockResponse });
+      
+      toast({
+        title: "Request Successful",
+        description: `${endpoint.method} request completed successfully`,
+      });
+    } catch (error) {
+      const errorResponse = {
+        status: 400,
+        statusText: "Bad Request",
+        data: { error: "Invalid request format" }
+      };
+      setResponses({ ...responses, [endpointId]: errorResponse });
+      
+      toast({
+        title: "Request Failed",
+        description: "There was an error with your request",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading({ ...loading, [endpointId]: false });
+    }
   };
 
   return (
@@ -325,10 +388,11 @@ export function ApiDocumentation() {
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="curl" className="w-full">
-                    <TabsList className="grid w-full max-w-md grid-cols-3">
+                    <TabsList className="grid w-full max-w-2xl grid-cols-4">
                       <TabsTrigger value="curl">cURL</TabsTrigger>
                       <TabsTrigger value="request">Request</TabsTrigger>
                       <TabsTrigger value="response">Response</TabsTrigger>
+                      <TabsTrigger value="playground">Try It</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="curl" className="relative">
@@ -388,6 +452,79 @@ export function ApiDocumentation() {
                             <Copy className="h-4 w-4" />
                           )}
                         </Button>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="playground" className="space-y-4">
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">API Key</label>
+                          <Input
+                            type="password"
+                            placeholder="Enter your API key"
+                            value={apiKey}
+                            onChange={(e) => setApiKey(e.target.value)}
+                            className="font-mono text-sm"
+                          />
+                        </div>
+
+                        {endpoint.method !== "GET" && (
+                          <div>
+                            <label className="text-sm font-medium mb-2 block">Request Body</label>
+                            <Textarea
+                              placeholder="Enter request body (JSON)"
+                              value={requestBodies[`${category}-${idx}`] || endpoint.request}
+                              onChange={(e) => setRequestBodies({
+                                ...requestBodies,
+                                [`${category}-${idx}`]: e.target.value
+                              })}
+                              className="font-mono text-sm min-h-[200px]"
+                            />
+                          </div>
+                        )}
+
+                        <Button
+                          onClick={() => handleApiCall(endpoint, `${category}-${idx}`)}
+                          disabled={loading[`${category}-${idx}`]}
+                          className="w-full"
+                        >
+                          {loading[`${category}-${idx}`] ? (
+                            <>
+                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                              Sending Request...
+                            </>
+                          ) : (
+                            <>
+                              <Play className="h-4 w-4 mr-2" />
+                              Send Request
+                            </>
+                          )}
+                        </Button>
+
+                        {responses[`${category}-${idx}`] && (
+                          <div className="space-y-3 pt-4 border-t">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium">Response</span>
+                              <Badge variant={responses[`${category}-${idx}`].status === 200 ? "default" : "destructive"}>
+                                {responses[`${category}-${idx}`].status} {responses[`${category}-${idx}`].statusText}
+                              </Badge>
+                            </div>
+                            
+                            <div>
+                              <p className="text-sm font-medium mb-2">Headers</p>
+                              <pre className="bg-muted p-3 rounded-lg overflow-x-auto text-xs">
+                                <code>{JSON.stringify(responses[`${category}-${idx}`].headers, null, 2)}</code>
+                              </pre>
+                            </div>
+
+                            <div>
+                              <p className="text-sm font-medium mb-2">Body</p>
+                              <pre className="bg-muted p-3 rounded-lg overflow-x-auto text-xs">
+                                <code>{JSON.stringify(responses[`${category}-${idx}`].data, null, 2)}</code>
+                              </pre>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </TabsContent>
                   </Tabs>
