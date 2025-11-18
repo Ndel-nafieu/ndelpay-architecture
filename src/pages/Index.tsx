@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { NetworkTopology } from "@/components/NetworkTopology";
 import { PaymentFlowVisualizer } from "@/components/PaymentFlowVisualizer";
@@ -6,6 +5,12 @@ import { PayoutFlowVisualizer } from "@/components/PayoutFlowVisualizer";
 import { ReconciliationView } from "@/components/ReconciliationView";
 import { DatabaseSchema } from "@/components/DatabaseSchema";
 import { ApiDocumentation } from "@/components/ApiDocumentation";
+import { StateMachineVisualizer } from "@/components/StateMachineVisualizer";
+import { SequenceDiagramViewer } from "@/components/SequenceDiagramViewer";
+import { ErrorHandlingGuide } from "@/components/ErrorHandlingGuide";
+import { SecurityFlowDiagram } from "@/components/SecurityFlowDiagram";
+import { EventSystemVisualizer } from "@/components/EventSystemVisualizer";
+import { BusinessRulesDashboard } from "@/components/BusinessRulesDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
@@ -13,7 +18,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8">
         <Tabs defaultValue="architecture" className="w-full">
-          <TabsList className="grid w-full max-w-6xl mx-auto grid-cols-7 mb-8">
+          <TabsList className="grid w-full max-w-7xl mx-auto grid-cols-7 lg:grid-cols-13 gap-1 mb-8 h-auto">
             <TabsTrigger value="architecture">Architecture</TabsTrigger>
             <TabsTrigger value="topology">Network</TabsTrigger>
             <TabsTrigger value="payment-flow">Payments</TabsTrigger>
@@ -21,6 +26,12 @@ const Index = () => {
             <TabsTrigger value="reconciliation">Reconciliation</TabsTrigger>
             <TabsTrigger value="database">Database</TabsTrigger>
             <TabsTrigger value="api-docs">API Docs</TabsTrigger>
+            <TabsTrigger value="state-machine">State Machine</TabsTrigger>
+            <TabsTrigger value="sequences">Sequences</TabsTrigger>
+            <TabsTrigger value="errors">Errors</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
+            <TabsTrigger value="events">Events</TabsTrigger>
+            <TabsTrigger value="business">Business Rules</TabsTrigger>
           </TabsList>
           <TabsContent value="architecture">
             <ArchitectureDiagram />
@@ -42,6 +53,24 @@ const Index = () => {
           </TabsContent>
           <TabsContent value="api-docs">
             <ApiDocumentation />
+          </TabsContent>
+          <TabsContent value="state-machine">
+            <StateMachineVisualizer />
+          </TabsContent>
+          <TabsContent value="sequences">
+            <SequenceDiagramViewer />
+          </TabsContent>
+          <TabsContent value="errors">
+            <ErrorHandlingGuide />
+          </TabsContent>
+          <TabsContent value="security">
+            <SecurityFlowDiagram />
+          </TabsContent>
+          <TabsContent value="events">
+            <EventSystemVisualizer />
+          </TabsContent>
+          <TabsContent value="business">
+            <BusinessRulesDashboard />
           </TabsContent>
         </Tabs>
       </div>
