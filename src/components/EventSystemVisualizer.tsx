@@ -490,7 +490,7 @@ async function handlePaymentCompleted(payment) {
   await sendEmail({
     to: payment.customer.email,
     subject: 'Payment Confirmed',
-    body: `Your payment of ${payment.amount} has been received.`
+    body: \`Your payment of ${'${'}payment.amount} has been received.\`
   });
 }`}
                       </pre>
