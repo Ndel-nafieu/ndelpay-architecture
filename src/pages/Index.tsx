@@ -11,6 +11,9 @@ import { ErrorHandlingGuide } from "@/components/ErrorHandlingGuide";
 import { SecurityFlowDiagram } from "@/components/SecurityFlowDiagram";
 import { EventSystemVisualizer } from "@/components/EventSystemVisualizer";
 import { BusinessRulesDashboard } from "@/components/BusinessRulesDashboard";
+import { CodeGenerator } from "@/components/CodeGenerator";
+import { ApiTesting } from "@/components/ApiTesting";
+import { PaymentLifecycleTimeline } from "@/components/PaymentLifecycleTimeline";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
@@ -18,7 +21,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8">
         <Tabs defaultValue="architecture" className="w-full">
-          <TabsList className="grid w-full max-w-7xl mx-auto grid-cols-7 lg:grid-cols-13 gap-1 mb-8 h-auto">
+          <TabsList className="grid w-full max-w-7xl mx-auto grid-cols-7 lg:grid-cols-16 gap-1 mb-8 h-auto">
             <TabsTrigger value="architecture">Architecture</TabsTrigger>
             <TabsTrigger value="topology">Network</TabsTrigger>
             <TabsTrigger value="payment-flow">Payments</TabsTrigger>
@@ -32,6 +35,9 @@ const Index = () => {
             <TabsTrigger value="security">Security</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
             <TabsTrigger value="business">Business Rules</TabsTrigger>
+            <TabsTrigger value="code-gen">Code Generator</TabsTrigger>
+            <TabsTrigger value="api-test">API Testing</TabsTrigger>
+            <TabsTrigger value="lifecycle">Payment Lifecycle</TabsTrigger>
           </TabsList>
           <TabsContent value="architecture">
             <ArchitectureDiagram />
@@ -71,6 +77,15 @@ const Index = () => {
           </TabsContent>
           <TabsContent value="business">
             <BusinessRulesDashboard />
+          </TabsContent>
+          <TabsContent value="code-gen">
+            <CodeGenerator />
+          </TabsContent>
+          <TabsContent value="api-test">
+            <ApiTesting />
+          </TabsContent>
+          <TabsContent value="lifecycle">
+            <PaymentLifecycleTimeline />
           </TabsContent>
         </Tabs>
       </div>
